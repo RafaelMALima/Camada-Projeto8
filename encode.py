@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
-from scipy.signal import firwin
+from scipy.signal import firwin, lfilter
+from filtro import LPF
 import sounddevice as sd
 import numpy as np
 import wave
@@ -7,22 +8,8 @@ import sys
 import scipy.io.wavfile as wav
 
 
-spf = wave.open("wavfile.wav", "r")
+signal = wav.read("TheLick.wav")
 
-# Extract Raw Audio from Wav File
-signal = spf.readframes(-1)
-signal = np.fromstring(signal, "Int16")
-
-
-# If Stereo
-if spf.getnchannels() == 2:
-    print("Just mono files")
-    sys.exit(0)
-
-plt.figure(1)
-plt.title("Signal Wave...")
-plt.plot(signal)
-plt.show()
 
 #------------------------------------------------
 # Create a FIR filter and apply it to signal.
@@ -37,14 +24,11 @@ nyq_rate = sample_rate / 2.
 # The cutoff frequency of the filter: 6KHz
 cutoff_hz = 2200.0
  
-# Length of the filter (number of coefficients, i.e. the filter order + 1)
 numtaps = 29
- 
-# Use firwin to create a lowpass FIR filter
-fir_coeff = firwin(numtaps, cutoff_hz/nyq_rate)
- 
 # Use lfilter to filter the signal with the FIR filter
-filtered_signal = lfilter(fir_coeff, 1.0, signal)
+filtered_signal = LPF(signal, cutoff_hz, sample_rate)
+
+print(filtered_signal)
 
 sd.play(filtered_signal, sample_rate)
 
