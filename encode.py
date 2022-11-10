@@ -4,6 +4,7 @@ import sounddevice as sd
 import numpy as np
 import wave
 import sys
+import scipy.io.wavfile as wav
 
 
 spf = wave.open("wavfile.wav", "r")
@@ -57,4 +58,4 @@ t = (0,5,44100*5)
 sinal_portadora = np.sin(freq_portadora * 2 * np.pi * t)
 
 sinal_modulado = sinal_portadora*signal
-scipy.io.wavfile.write("sinal_modulado", sample_rate , sinal_portadora)
+wav.write("sinal_modulado", sample_rate , sinal_portadora)
