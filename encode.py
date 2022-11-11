@@ -41,4 +41,4 @@ t = np.linspace(0,5,sample_rate*5)
 sinal_portadora = np.sin(freq_portadora * 2 * np.pi * t)
 
 sinal_modulado = sinal_portadora*filtered_signal[:-2205]
-wav.write("sinal_modulado", sample_rate , sinal_portadora)
+wav.write("sinal_modulado.wav", sample_rate , sinal_portadora)
